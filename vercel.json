@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-stale-tasks",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/sync-github-data",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
