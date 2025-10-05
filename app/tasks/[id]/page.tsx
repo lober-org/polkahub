@@ -52,147 +52,204 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col relative">
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-black" />
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-[#EC4899]/20"
+              style={{
+                width: Math.random() * 4 + 1 + "px",
+                height: Math.random() * 4 + 1 + "px",
+                left: Math.random() * 100 + "%",
+                top: Math.random() * 100 + "%",
+                animation: `float ${Math.random() * 10 + 10}s linear infinite`,
+                animationDelay: Math.random() * 5 + "s",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       <SiteHeader />
       <main className="flex-1">
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2 space-y-6">
-              <Card className="bg-purple-950/20 border-purple-500/20 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <Badge
-                      variant={
-                        task.status === "open" ? "default" : task.status === "completed" ? "secondary" : "outline"
-                      }
-                      className="bg-purple-500/20 text-purple-300 border-purple-500/30"
-                    >
-                      {task.status}
-                    </Badge>
-                    {task.difficulty && (
-                      <Badge variant="outline" className="border-pink-500/30 text-pink-300">
-                        {task.difficulty}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="mb-8 animate-fade-in-up">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+              <Link href="/tasks" className="hover:text-[#EC4899] transition-colors">
+                Tasks
+              </Link>
+              <span>/</span>
+              <span className="text-foreground">{task.title}</span>
+            </div>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-8">
+              <div className="animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+                <Card className="glass-card border-border/40 hover:border-[#EC4899]/30 transition-all duration-500 group">
+                  <CardHeader className="space-y-4">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge
+                        variant={
+                          task.status === "open" ? "default" : task.status === "completed" ? "secondary" : "outline"
+                        }
+                        className="bg-[#EC4899]/10 text-[#EC4899] border-[#EC4899]/30 text-sm px-3 py-1"
+                      >
+                        {task.status}
                       </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-2xl md:text-3xl text-purple-100">{task.title}</CardTitle>
-                  <CardDescription className="text-purple-300/70">
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="hover:text-purple-400 transition-colors inline-flex items-center gap-1"
-                    >
-                      {project.github_repo_name}
-                    </Link>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {task.description && (
-                    <div>
-                      <h3 className="font-semibold mb-2 text-purple-200">Description</h3>
-                      <p className="text-purple-300/80 whitespace-pre-wrap">{task.description}</p>
+                      {task.difficulty && (
+                        <Badge variant="outline" className="border-border/60 text-muted-foreground text-sm px-3 py-1">
+                          {task.difficulty}
+                        </Badge>
+                      )}
                     </div>
-                  )}
-
-                  {task.tags && task.tags.length > 0 && (
-                    <div>
-                      <h3 className="font-semibold mb-2 text-purple-200">Tags</h3>
-                      <div className="flex gap-2 flex-wrap">
-                        {task.tags.map((tag: string) => (
-                          <Badge key={tag} variant="secondary" className="bg-purple-500/10 text-purple-300">
-                            {tag}
-                          </Badge>
-                        ))}
+                    <CardTitle className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+                      {task.title}
+                    </CardTitle>
+                    <CardDescription className="text-base text-muted-foreground">
+                      <Link
+                        href={`/projects/${project.id}`}
+                        className="hover:text-[#EC4899] transition-colors inline-flex items-center gap-2 font-medium"
+                      >
+                        <Github className="h-4 w-4" />
+                        {project.github_repo_name}
+                      </Link>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {task.description && (
+                      <div className="space-y-3">
+                        <h3 className="text-xl font-semibold text-foreground">Description</h3>
+                        <p className="text-muted-foreground leading-relaxed text-base whitespace-pre-wrap">
+                          {task.description}
+                        </p>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div className="flex flex-col sm:flex-row gap-2 pt-4">
-                    <Button
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                      asChild
-                    >
-                      <a href={task.github_issue_url} target="_blank" rel="noopener noreferrer">
-                        <Github className="mr-2 h-4 w-4" />
-                        View GitHub Issue
-                      </a>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="border-purple-500/30 hover:bg-purple-500/10 bg-transparent"
-                      asChild
-                    >
-                      <Link href="/auth/login">Start Contributing</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    {task.tags && task.tags.length > 0 && (
+                      <div className="space-y-3">
+                        <h3 className="text-xl font-semibold text-foreground">Tags</h3>
+                        <div className="flex gap-2 flex-wrap">
+                          {task.tags.map((tag: string) => (
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="bg-muted/50 text-muted-foreground border border-border/40 hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 text-sm px-3 py-1"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row gap-3 pt-6">
+                      <Button
+                        className="bg-gradient-to-r from-[#EC4899] to-pink-600 hover:from-[#EC4899]/90 hover:to-pink-600/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#EC4899]/25 text-base py-6"
+                        asChild
+                      >
+                        <a href={task.github_issue_url} target="_blank" rel="noopener noreferrer">
+                          <Github className="mr-2 h-5 w-5" />
+                          View GitHub Issue
+                        </a>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-border/60 hover:bg-[#EC4899]/10 hover:border-[#EC4899]/40 hover:text-[#EC4899] bg-transparent transition-all duration-300 hover:scale-105 text-base py-6"
+                        asChild
+                      >
+                        <Link href="/auth/login">Start Contributing</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
             <div className="space-y-6">
-              <Card className="bg-purple-950/20 border-purple-500/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-purple-100">Reward</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {Number(task.reward_amount_dot).toFixed(2)} DOT
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-purple-300/70">
-                    <Lock className="h-4 w-4" />
-                    <span>Locked in escrow</span>
-                  </div>
-                  <Badge variant="outline" className="mt-2 border-purple-500/30 text-purple-300">
-                    funded
-                  </Badge>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-purple-950/20 border-purple-500/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-purple-100">Project</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    {project.logo_url && (
-                      <Avatar className="border-2 border-purple-500/20">
-                        <AvatarImage src={project.logo_url || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-purple-500/10 text-purple-300">
-                          {project.github_repo_name[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                    <div>
-                      <p className="font-medium text-purple-100">{project.github_repo_name}</p>
-                      <p className="text-sm text-purple-300/70">@{project.github_owner}</p>
+              <div className="animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+                <Card className="glass-card border-border/40 hover:border-[#EC4899]/30 transition-all duration-500 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#EC4899]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <CardHeader>
+                    <CardTitle className="text-lg text-foreground">Reward</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#EC4899] to-pink-600 bg-clip-text text-transparent leading-tight">
+                      {Number(task.reward_amount_dot).toFixed(2)} DOT
                     </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="w-full border-purple-500/30 hover:bg-purple-500/10 bg-transparent"
-                    asChild
-                  >
-                    <Link href={`/projects/${project.id}`}>View All Tasks</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Lock className="h-4 w-4" />
+                      <span>Locked in escrow</span>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="border-[#EC4899]/30 text-[#EC4899] bg-[#EC4899]/10 text-sm px-3 py-1"
+                    >
+                      funded
+                    </Badge>
+                  </CardContent>
+                </Card>
+              </div>
 
-              <Card className="bg-purple-950/20 border-purple-500/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-purple-100">Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-purple-300/70" />
-                    <span className="text-purple-300/70">Created:</span>
-                    <span className="text-purple-200">{new Date(task.created_at).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Github className="h-4 w-4 text-purple-300/70" />
-                    <span className="text-purple-300/70">Issue:</span>
-                    <span className="text-purple-200">#{task.github_issue_number}</span>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+                <Card className="glass-card border-border/40 hover:border-[#EC4899]/30 transition-all duration-500 group">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-foreground">Project</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      {project.logo_url && (
+                        <Avatar className="border-2 border-border/40 h-12 w-12 group-hover:border-[#EC4899]/30 transition-colors duration-300">
+                          <AvatarImage src={project.logo_url || "/placeholder.svg"} />
+                          <AvatarFallback className="bg-muted text-muted-foreground text-lg">
+                            {project.github_repo_name[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div>
+                        <p className="font-semibold text-foreground text-base">{project.github_repo_name}</p>
+                        <p className="text-sm text-muted-foreground">@{project.github_owner}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="w-full border-border/60 hover:bg-[#EC4899]/10 hover:border-[#EC4899]/40 hover:text-[#EC4899] bg-transparent transition-all duration-300 hover:scale-105"
+                      asChild
+                    >
+                      <Link href={`/projects/${project.id}`}>View All Tasks</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
+                <Card className="glass-card border-border/40 hover:border-[#EC4899]/30 transition-all duration-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-foreground">Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm">
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors duration-300">
+                      <Calendar className="h-5 w-5 text-[#EC4899]" />
+                      <div className="flex flex-col">
+                        <span className="text-xs text-muted-foreground">Created</span>
+                        <span className="text-foreground font-medium">
+                          {new Date(task.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors duration-300">
+                      <Github className="h-5 w-5 text-[#EC4899]" />
+                      <div className="flex flex-col">
+                        <span className="text-xs text-muted-foreground">Issue Number</span>
+                        <span className="text-foreground font-medium">#{task.github_issue_number}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>

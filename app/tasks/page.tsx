@@ -50,33 +50,40 @@ export default async function TasksPage() {
               {tasks.map((task: any, index: number) => (
                 <div
                   key={task.id}
-                  className="group glass-card border-white/5 hover:border-[#EC4899]/40 transition-all duration-300 rounded-2xl overflow-hidden animate-fade-in-up"
+                  className="group relative glass-card border-border/40 hover:border-[#EC4899]/60 transition-all duration-500 rounded-2xl overflow-hidden animate-fade-in-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="p-6 sm:p-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#EC4899]/0 via-[#EC4899]/5 to-[#EC4899]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <div className="relative p-6 sm:p-8">
                     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
                       {/* Left content */}
-                      <div className="flex-1 space-y-4">
+                      <div className="flex-1 space-y-5">
                         <div className="flex flex-wrap items-center gap-3">
                           <Link
                             href={`/projects/${task.project_id}`}
-                            className="text-sm font-medium text-muted-foreground hover:text-[#EC4899] transition-colors"
+                            className="text-sm font-semibold text-muted-foreground hover:text-[#EC4899] transition-colors duration-300"
                           >
                             {task.projects?.github_repo_name}
                           </Link>
                           {task.difficulty && (
-                            <Badge variant="outline" className="text-xs border-border text-muted-foreground">
+                            <Badge
+                              variant="outline"
+                              className="text-xs border-border/60 text-muted-foreground hover:border-[#EC4899]/40 transition-colors"
+                            >
                               {task.difficulty}
                             </Badge>
                           )}
                         </div>
 
-                        <h3 className="text-2xl sm:text-3xl font-bold group-hover:text-[#EC4899] transition-colors">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-foreground group-hover:text-[#EC4899] transition-colors duration-300 leading-tight">
                           {task.title}
                         </h3>
 
                         {task.description && (
-                          <p className="text-muted-foreground leading-relaxed line-clamp-2">{task.description}</p>
+                          <p className="text-muted-foreground leading-relaxed line-clamp-2 text-base">
+                            {task.description}
+                          </p>
                         )}
 
                         {/* Tags */}
@@ -85,7 +92,7 @@ export default async function TasksPage() {
                             <Badge
                               key={tag}
                               variant="secondary"
-                              className="text-xs bg-muted hover:bg-muted/80 border-border transition-colors"
+                              className="text-xs bg-muted/50 hover:bg-muted border border-border/40 hover:border-[#EC4899]/30 transition-all duration-300"
                             >
                               {tag}
                             </Badge>
@@ -93,21 +100,21 @@ export default async function TasksPage() {
                         </div>
                       </div>
 
-                      {/* Right content - Reward */}
-                      <div className="flex flex-col items-start lg:items-end gap-4 lg:text-right">
-                        <div className="space-y-1">
-                          <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#EC4899] to-pink-600 bg-clip-text text-transparent">
+                      <div className="flex flex-col items-start lg:items-end gap-5 lg:text-right min-w-[200px]">
+                        <div className="space-y-2">
+                          <div className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-[#EC4899] via-pink-500 to-pink-600 bg-clip-text text-transparent leading-none">
                             {Number(task.reward_amount_dot).toFixed(2)}
                           </div>
-                          <div className="text-sm text-muted-foreground font-medium">DOT Reward</div>
+                          <div className="text-sm text-muted-foreground font-semibold tracking-wide uppercase">
+                            DOT Reward
+                          </div>
                         </div>
 
-                        {/* Action buttons */}
                         <div className="flex gap-3 w-full lg:w-auto">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="flex-1 lg:flex-none bg-transparent border-border hover:border-[#EC4899]/40 hover:bg-[#EC4899]/10"
+                            className="flex-1 lg:flex-none bg-transparent border-border/60 hover:border-[#EC4899]/60 hover:bg-[#EC4899]/10 hover:text-[#EC4899] transition-all duration-300"
                             asChild
                           >
                             <a href={task.github_issue_url} target="_blank" rel="noopener noreferrer">
@@ -117,7 +124,7 @@ export default async function TasksPage() {
                           </Button>
                           <Button
                             size="sm"
-                            className="flex-1 lg:flex-none bg-gradient-to-r from-[#EC4899] to-pink-600 hover:opacity-90 transition-opacity"
+                            className="flex-1 lg:flex-none bg-gradient-to-r from-[#EC4899] to-pink-600 hover:from-[#EC4899]/90 hover:to-pink-600/90 hover:scale-105 transition-all duration-300 shadow-lg shadow-[#EC4899]/20"
                             asChild
                           >
                             <Link href={`/tasks/${task.id}`}>View Details</Link>
